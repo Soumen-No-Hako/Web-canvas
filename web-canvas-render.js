@@ -9,6 +9,7 @@ const FPS = 60;
 const size = 0.5;
 const axisLimit = 10; 
 var cam = 3.0;
+var cam_pos = {x:0, y:0, z:axisLimit/4}
 
 // imagine the coordinate system
 /*       ^
@@ -53,7 +54,9 @@ function renderPoint_all(vertices_2d){
 
 function project({x, y, z})
 {
-	z=z+cam;
+	x += cam_pos.x;
+	y += cam_pos.y;
+	z += cam_pos.z;
 	return {
 		x: x/z,
 		y: y/z,
@@ -100,7 +103,7 @@ function rotate_all_xz(vertices, angle){
 }
 
 clear();
-arrray_size = 35;
+arrray_size = 20;
 
 var randPoints = [];
 
@@ -260,11 +263,17 @@ setTimeout(frame, 1000/FPS);
 
 const z_dir = document.getElementById("z_dir");
 
-const dir_z = -0.2; // displacement per second
+const dir_z = -0.2; // displacement per event
 document.addEventListener('keydown', (event) => {
-	if(event.key=='w') cam += dir_z;
-	if(event.key=='s') cam -= dir_z;
-	z_dir.textContent = "z="+cam.toFixed(2);
+	if(event.key=='w') cam_pos.z += dir_z;
+	if(event.key=='s') cam_pos.z -= dir_z;
+	
+	if(event.key=='d') cam_pos.x += dir_z;
+	if(event.key=='a') cam_pos.x -= dir_z;
+	
+	if(event.key=='h') cam_pos.y += dir_z;
+	if(event.key=='l') cam_pos.y -= dir_z;
+	z_dir.textContent = "Camera position -> "+"x("+cam_pos.x.toFixed(2)+") ("+cam_pos.y.toFixed(2)*-1+") z("+cam_pos.z.toFixed(2)+")";
 	// if(event.key=='w') cam += ds;
 	// if(event.key=='w') cam += ds;
 });
